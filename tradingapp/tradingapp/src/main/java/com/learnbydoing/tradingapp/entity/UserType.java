@@ -8,8 +8,8 @@ import java.util.List;
 @Table(name = "users_type")
 public class UserType {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "users_type")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_type_id")
     private int userTypeId;
 
     @Column(name = "user_type_name")

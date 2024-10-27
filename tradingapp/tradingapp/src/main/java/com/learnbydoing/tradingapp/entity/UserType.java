@@ -1,7 +1,11 @@
 package com.learnbydoing.tradingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,8 +20,18 @@ public class UserType {
     private String userTypeName;
 
     // Advanced mapping: 1 userType can have many Users. MappedBy = "..." should exist in User clss referencing UserType
-    @OneToMany(mappedBy = "userType")
+
+    @OneToMany(mappedBy = "userType", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
+    @JsonIgnore
     private List<User> users;
+
+    public void addUser(User user){
+        if(users == null){
+            users = new ArrayList<>();
+        }
+        users.add(user);
+        user.setUserType(this);  //Maintain bidirectional relationship
+    }
 
     public UserType() {
     }

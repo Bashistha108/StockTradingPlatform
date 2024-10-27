@@ -1,5 +1,8 @@
 package com.learnbydoing.tradingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -36,7 +39,10 @@ public class User {
     @Column(name = "profile_photo", length = 255)
     private String profilePhoto;
 
-    @ManyToOne //Many users can have one userType
+
+
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}) //Many users can have one userType
     @JoinColumn(name = "user_type_id")  //referencing the PK of the other table
     private UserType userType;   // Creating a column because it exist as FK
 

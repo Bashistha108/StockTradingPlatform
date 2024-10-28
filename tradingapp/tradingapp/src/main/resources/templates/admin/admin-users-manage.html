@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration</title>
+</head>
+<body>
+    <h1>User Administration</h1>
+    <br>
+    <a href="#">Add Users</a>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>User Type</th>
+                <th>Password</th>
+                <th>Active</th>
+                <th>Registration Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="user:${users}">
+                <td th:text="${user.userId}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.userType.userTypeName}"></td>
+                <td th:text="${user.password}"></td>
+                <td th:text="${user.active}"></td>
+                <td th:text="${user.registrationDate}"></td>
+                <td>
+                        <a href="#">Delete</a>
+                        <a href="#">Update</a>
+                        <a href="#">Send Message</a>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

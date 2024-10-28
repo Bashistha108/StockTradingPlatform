@@ -29,6 +29,7 @@ public class UserType {
         if(users == null){
             users = new ArrayList<>();
         }
+
         users.add(user);
         user.setUserType(this);  //Maintain bidirectional relationship
     }

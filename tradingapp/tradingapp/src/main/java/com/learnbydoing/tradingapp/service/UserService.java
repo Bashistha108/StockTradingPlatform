@@ -4,6 +4,7 @@ import com.learnbydoing.tradingapp.entity.User;
 import com.learnbydoing.tradingapp.entity.UserType;
 import com.learnbydoing.tradingapp.repository.UserRepository;
 import com.learnbydoing.tradingapp.repository.UserTypeRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,17 @@ public class UserService{
 
     public User getUserByEmail(String email){
         return userRepository.findByEmail(email);
+    }
+
+    public User updateUser(Integer userId, User user){
+        User currentUser = userRepository.getById(userId);
+        currentUser.setEmail(user.getEmail());
+        currentUser.setActive(user.isActive());
+        currentUser.setFirstName(user.getFirstName());
+        currentUser.setLastName(user.getLastName());
+        currentUser.setProfilePhoto(user.getProfilePhoto());
+        currentUser.setPassword(user.getPassword());
+        return userRepository.save(user);
     }
 
 }

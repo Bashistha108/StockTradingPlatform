@@ -9,11 +9,25 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * This component defines actions that should be taken when a user successfully authenticates to the application
+ * */
+
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public static final String ROLE_ADMIN = "ROLE_Admin";
+    public static final String ROLE_TRADER = "ROLE_Trader";
 
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+            //Custom Logic after successfull authentication like redirecting to page based on role
+        if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_ADMIN))){
+            response.sendRedirect("/admin-home");
+        }
+        else{
+            response.sendRedirect("/trader-home");
+        }
     }
 }

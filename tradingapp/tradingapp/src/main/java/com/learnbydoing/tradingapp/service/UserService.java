@@ -6,6 +6,7 @@ import com.learnbydoing.tradingapp.repository.UserRepository;
 import com.learnbydoing.tradingapp.repository.UserTypeRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,11 +19,13 @@ public class UserService{
 
     private final UserRepository userRepository;
     private final UserTypeRepository userTypeRepository;
+    private final PasswordEncoder passwordEncoder; //For Bcrypting
 
     @Autowired
-    public UserService(UserRepository userRepository, UserTypeRepository userTypeRepository){
+    public UserService(UserRepository userRepository, UserTypeRepository userTypeRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.userTypeRepository = userTypeRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //default method .findAll() in JpaRepository
@@ -37,6 +40,11 @@ public class UserService{
     }
 
     public User createUser(User user) {
+
+        //Hashing the password before saving it
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+
         user.setRegistrationDate(LocalDateTime.now()); // Set LocalDateTime directly
         UserType userType = userTypeRepository.findById(user.getUserType().getUserTypeId())
                 .orElseThrow(()->new RuntimeException("UserType not found"));

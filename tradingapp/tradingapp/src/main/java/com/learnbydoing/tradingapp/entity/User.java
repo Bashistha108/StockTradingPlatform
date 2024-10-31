@@ -134,6 +134,15 @@ public class User {
         this.userType = userType;
     }
 
+    // We are using userTypeName as Role in our Application
+    public String getRole(){
+        if(userType != null){
+            return userType.getUserTypeName();
+        }
+        return null;
+
+    }
+
     @Override
     public String toString() {
         return "User{" +

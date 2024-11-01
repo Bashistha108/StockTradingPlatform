@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Form</title>
+</head>
+<body>
+    <h3>User Add/Update</h3>
+    <form action="#" th:action="@{/users/add-update-user}" th:object="${userForm}" method="POST">
+        <!--
+            Form field for user and UserType.
+            when submit button clicked, will trigger create-user and this uses usersForm as object passed
+            in the Model in the controller. THe usersForm has user and userType attribute which will be used
+            *{user.email} means user.gerEmail()
+        -->
+        <input type="hidden" th:field="*{user.userId}">
+        <input type="text" th:field="*{user.firstName}" placeholder="First Name" required>
+        <input type="text" th:field="*{user.lastName}" placeholder="Last Name" required>
+        <input type="email" th:field="*{user.email}" placeholder="Email" required>
+        <input type="text" th:field="*{user.password}" placeholder="Password" required>
+
+        <label for="userType">User Type:</label>
+
+        <select name="userType" id="userType" th:field="*{user.userType.userTypeId}" required>
+            <option th:value="1" th:text="Admin">Admin</option>
+            <option th:value="2" th:text="Trader">Trader</option>
+        </select>
+
+       
+        <br><br>
+        <button type="submit">Save User and UserType</button>
+
+    </form>
+</body>
+</html>
+

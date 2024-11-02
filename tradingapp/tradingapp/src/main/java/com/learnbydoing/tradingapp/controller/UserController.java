@@ -54,6 +54,8 @@ public class UserController {
     public void updateUser(@PathVariable int id, @RequestBody User user){
         userService.updateUser(id, user);
     }
+
+
 */
     @PostMapping("/add-update-user")
     public String saveUser(@ModelAttribute("userForm") UserForm userForm, Model model) {
@@ -71,12 +73,6 @@ public class UserController {
             UserType userType = userForm.getUserType();
             if (user != null && userType != null) {
                 user.setUserType(userType);// Set user type only if user is not null
-                if(userType.getUserTypeId() == 1){
-                    userType.setUserTypeName("Admin");
-                }
-                if(userType.getUserTypeId() == 2){
-                    userType.setUserTypeName("Trader");
-                }
                 userService.saveUser(user); // Save the user
                 List<UserType> userTypes = userTypeService.getAllUserTypes();
 

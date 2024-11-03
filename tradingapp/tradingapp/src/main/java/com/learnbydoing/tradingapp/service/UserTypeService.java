@@ -1,9 +1,11 @@
 package com.learnbydoing.tradingapp.service;
 
+import com.learnbydoing.tradingapp.entity.User;
 import com.learnbydoing.tradingapp.entity.UserType;
 import com.learnbydoing.tradingapp.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,10 +13,12 @@ import java.util.List;
 public class UserTypeService {
 
     private final UserTypeRepository userTypeRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserTypeService(UserTypeRepository userTypeRepository){
+    public UserTypeService(UserTypeRepository userTypeRepository, UserService userService){
         this.userTypeRepository = userTypeRepository;
+        this.userService = userService;
     }
 
     public List<UserType> getAllUserTypes(){
@@ -25,8 +29,17 @@ public class UserTypeService {
         return userTypeRepository.findById(id).orElse(null);
     }
 
-    public UserType createUserType(UserType userType){
-        return userTypeRepository.save(userType);
+    @Transactional
+    public UserType createUserType(Integer id, UserType userType){
+        User user = userService.getUserById(id);
+        if(user!=null){
+            user.setUserType(userType);
+            userService.saveUser(user);
+            return userTypeRepository.save(userType);
+        }
+        else{
+            return null;
+        }
     }
 
     public void deleteUserType(Integer id){

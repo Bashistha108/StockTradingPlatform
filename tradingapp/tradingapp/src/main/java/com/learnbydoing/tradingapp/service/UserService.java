@@ -6,6 +6,7 @@ import com.learnbydoing.tradingapp.repository.UserRepository;
 import com.learnbydoing.tradingapp.repository.UserTypeRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -36,8 +38,8 @@ public class UserService{
 
     //Integer instead of int to hold null. int can't hold null, helds  0 instead which may cause confusion
     // Use Optional to avoid null pointer exception and to use isPresent... functions
-    public Optional<User> getUserById(Integer id){
-        return userRepository.findById(id);
+    public User getUserById(Integer id){
+        return userRepository.findById(id).orElseThrow(()->new NoSuchElementException("User not found with id: "+id));
     }
 //
 //    @Transactional

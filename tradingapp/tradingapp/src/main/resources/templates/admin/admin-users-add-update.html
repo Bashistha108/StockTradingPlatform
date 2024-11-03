@@ -6,7 +6,7 @@
 </head>
 <body>
     <h3>User Add/Update</h3>
-    <form action="#" th:action="@{/users/add-update-user}" th:object="${userForm}" method="POST">
+    <form action="#" th:action="@{/users/save-user}" th:object="${userForm}" method="POST">
         <!--
             Form field for user and UserType.
             when submit button clicked, will trigger create-user and this uses usersForm as object passed

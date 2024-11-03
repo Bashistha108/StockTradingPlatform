@@ -22,12 +22,12 @@ public class UserTypeController {
     public List<UserType> getAllUserTypes(){
         return userTypeService.getAllUserTypes();
     }
-
+/*
     @PostMapping("/create")
     public UserType createUserType(@RequestBody UserType userType){
         return userTypeService.createUserType(userType);
     }
-
+*/
     @DeleteMapping("/delete/{id}")
     public void deleteUserType(@PathVariable int id){
         userTypeService.deleteUserType(id);

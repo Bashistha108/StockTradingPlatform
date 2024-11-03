@@ -57,47 +57,20 @@ public class UserController {
 
 
 */
-    @PostMapping("/add-update-user")
+    @PostMapping("/save-user")
     public String saveUser(@ModelAttribute("userForm") UserForm userForm, Model model) {
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println(userForm.getUser());
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("-----------");
+        User user = userForm.getUser();
+        UserType userType = userForm.getUserType();
+        user.setUserType(userType);
+        userService.saveUser(user);
+        Integer id = user.getUserId();
+        userTypeService.createUserType(id, userType);
 
-        try {
-            // Set the user type if user is not null
-            User user = userForm.getUser();
-            UserType userType = userForm.getUserType();
-            if (user != null && userType != null) {
-                user.setUserType(userType);// Set user type only if user is not null
-                userService.saveUser(user); // Save the user
-                List<UserType> userTypes = userTypeService.getAllUserTypes();
-
-                System.out.println("------------------");
-                System.out.println(userTypes);
-                System.out.println("------------------");
-
-                model.addAttribute("userTypes", userTypes);
-                model.addAttribute("userForm", userForm);
-                return "admin/admin-users-manage";
-            } else {
-                model.addAttribute("errorMessage", "User or User Type cannot be null.");
-                return "admin/admin-users-add-update"; // Stay on the form page with error message
-            }
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "Error saving user: " + e.getMessage());
-        }
-        model.addAttribute("userForm", userForm); // Add userForm to model again
-        return "redirect:/manage-users"; // Redirect to the user list after saving
+        return "redirect:/manage-users";
     }
-    @GetMapping("/add-update-user")
-    public String showFormForAddUpdate(Model model, @ModelAttribute("userForm") UserForm userForm){
-        if(userForm.getUser() == null){
-            userForm.setUser(new User());
-        }
+    @GetMapping("/add-update-user-form")
+    public String showFormForAddUpdate(Model model){
+        UserForm userForm = new UserForm();
         model.addAttribute("userForm", userForm);
         return "admin/admin-users-add-update";
     }

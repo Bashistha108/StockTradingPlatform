@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserTypeService {
@@ -30,8 +31,10 @@ public class UserTypeService {
     }
 
     @Transactional
-    public UserType createUserType(Integer id, UserType userType){
+    public UserType createUserType(Integer id, int userTypeId){
         User user = userService.getUserById(id);
+        UserType userType = userTypeRepository.findById(userTypeId)
+                .orElseThrow(()->new RuntimeException("Usertype not found with id"+ userTypeId));
         if(user!=null){
             user.setUserType(userType);
             userService.saveUser(user);

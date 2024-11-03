@@ -25,47 +25,13 @@ public class UserController {
         this.userService = userService;
         this.userTypeService = userTypeService;
     }
-
-    /*
-    @GetMapping
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id){
-        Optional<User> user = userService.getUserById(id);
-        // Convert User to ResponseEntity if Present
-        return user.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
-
-     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable int id){
-        userService.deleteUser(id);
-
-    }
-
-    @DeleteMapping("/deleteAllUsers")
-    public void deleteAllUsers(){
-        userService.deleteAllUsers();
-    }
-
-    @PutMapping("/update/{id}")
-    public void updateUser(@PathVariable int id, @RequestBody User user){
-        userService.updateUser(id, user);
-    }
-
-
-*/
     @PostMapping("/save-user")
     public String saveUser(@ModelAttribute("userForm") UserForm userForm, Model model) {
         User user = userForm.getUser();
-        UserType userType = userForm.getUserType();
+        int userTypeId = userForm.getUserType().getUserTypeId();
+        UserType userType = userTypeService.getUserTypeById(userTypeId);
         user.setUserType(userType);
         userService.saveUser(user);
-        Integer id = user.getUserId();
-        userTypeService.createUserType(id, userType);
-
         return "redirect:/manage-users";
     }
     @GetMapping("/add-update-user-form")

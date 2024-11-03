@@ -21,9 +21,9 @@ public class UserType {
 
     // Advanced mapping: 1 userType can have many Users. MappedBy = "..." should exist in User clss referencing UserType
 
-    @OneToMany(mappedBy = "userType", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "userType", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JsonIgnore
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     public void addUser(User user){
         if(users == null){

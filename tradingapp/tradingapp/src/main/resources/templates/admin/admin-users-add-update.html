@@ -21,8 +21,8 @@
 
         <label for="userType">User Type:</label>
 
-        <select name="userType" id="userType" th:field="*{user.userType.userTypeId}" required>
-            <option th:value="1" th:text="Admin">Admin</option>
+        <select name="userType" id="userType" th:field="*{userType.userTypeId}" required>
+            <option th:value="1" th:text="Admin" >Admin</option>
             <option th:value="2" th:text="Trader">Trader</option>
         </select>
 

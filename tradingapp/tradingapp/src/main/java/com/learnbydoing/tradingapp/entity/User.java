@@ -42,7 +42,7 @@ public class User {
 
 
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}) //Many users can have one userType
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}) //Many users can have one userType
     @JoinColumn(name = "user_type_id")  //referencing the PK of the other table
     private UserType userType;   // Creating a column because it exist as FK
 

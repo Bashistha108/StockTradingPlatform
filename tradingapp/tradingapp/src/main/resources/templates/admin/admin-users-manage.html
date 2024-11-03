@@ -7,7 +7,9 @@
 <body>
     <h1>User Administration</h1>
     <br>
-    <a th:href="@{/users/add-update-user-form}">Add Users</a>
+    <form action="#" th:action="@{/users/add-update-user-form}" method="GET">
+        <input type="submit" value="Add User +"></input>
+    </form>
     <br>
     <br>
     <table>

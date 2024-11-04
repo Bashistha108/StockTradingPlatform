@@ -25,6 +25,7 @@ public class UserController {
         this.userService = userService;
         this.userTypeService = userTypeService;
     }
+
     @PostMapping("/save-user")
     public String saveUser(@ModelAttribute("userForm") UserForm userForm, Model model) {
         User user = userForm.getUser();
@@ -34,13 +35,13 @@ public class UserController {
         userService.saveUser(user);
         return "redirect:/manage-users";
     }
+
     @GetMapping("/add-update-user-form")
     public String showFormForAddUpdate(Model model){
         UserForm userForm = new UserForm();
         model.addAttribute("userForm", userForm);
         return "admin/admin-users-add-update";
     }
-
 
    public class UserForm{
         private User user;

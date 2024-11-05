@@ -38,8 +38,12 @@
                 <td th:text="${user.active}"></td>
                 <td th:text="${user.registrationDate}"></td>
                 <td>
-                        <a href="#">Delete</a>
-                        <a href="#">Update</a>
+                        <!-- <a th:href="@{/delete-user(id=${user.userId})}">Delete</a> -->
+                    <form th:action="@{/delete-user(id=${user.userId})}" method="post">
+                        <input type="hidden" name="_method" value="delete" />
+                        <input type="submit" value="Delete">
+                    </form>
+                        <a th:href="@{/add-update-user-form}">Update</a>
                         <a href="#">Send Message</a>
                 </td>
 

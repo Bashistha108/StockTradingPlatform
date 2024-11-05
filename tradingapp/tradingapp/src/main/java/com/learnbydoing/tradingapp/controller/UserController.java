@@ -43,6 +43,13 @@ public class UserController {
         return "admin/admin-users-add-update";
     }
 
+    @DeleteMapping("/delete-user")
+    public String deleteUser(@RequestParam("id") int id){
+        userService.deleteUser(id);
+        System.out.println("User deleted with id: "+id);
+        return "redirect:/manage-users";
+    }
+
    public class UserForm{
         private User user;
         private UserType userType;

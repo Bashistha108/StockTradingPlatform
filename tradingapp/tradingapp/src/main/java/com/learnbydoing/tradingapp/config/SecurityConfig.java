@@ -32,7 +32,7 @@ public class SecurityConfig {
                         //.requestMatchers("/").hasAnyRole("Admin", "Trader")
                        // .requestMatchers("/login-page", "/access-denied").permitAll()
                       //  .requestMatchers("/manage-users", "/admin-home", "/users/*").hasRole("Admin")
-                        .requestMatchers("/", "/users/*", "/manage-users", "/").permitAll()
+                        .requestMatchers("/", "/users/*", "/manage-users", "/delete-user").permitAll()
                         .anyRequest() // Any other requests not matched by previous rules requires authentication
                         .authenticated())
                 .formLogin(form -> form

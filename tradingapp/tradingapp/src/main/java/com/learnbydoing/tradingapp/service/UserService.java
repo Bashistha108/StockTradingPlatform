@@ -62,7 +62,9 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Integer id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).orElseThrow(()->new NoSuchElementException("User not found"));
+        user.setUserType(null);
+        userRepository.delete(user);
         System.out.println("User with id: " + id + " deleted");
     }
 

@@ -32,9 +32,12 @@ public class SecurityConfig {
                         //.requestMatchers("/").hasAnyRole("Admin", "Trader")
                        // .requestMatchers("/login-page", "/access-denied").permitAll()
                       //  .requestMatchers("/manage-users", "/admin-home", "/users/*").hasRole("Admin")
-                        .requestMatchers("/", "/users/*", "/manage-users", "/delete-user").permitAll()
-                        .anyRequest() // Any other requests not matched by previous rules requires authentication
-                        .authenticated())
+                        .requestMatchers("/admin/**").hasRole("Admin")        // If using /admin prefix
+                        .requestMatchers("/users/delete-user/**").authenticated()    // Changed this
+                        .requestMatchers("/manage-users").authenticated()
+                        .requestMatchers("/", "/users/*", "/login-page", "/access-denied").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .formLogin(form -> form
                         .loginPage("/login-page")
                         .loginProcessingUrl("/authenticateTheUser")

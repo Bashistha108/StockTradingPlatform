@@ -43,8 +43,9 @@ public class UserController {
         return "admin/admin-users-add-update";
     }
 
-    @DeleteMapping("/delete-user")
-    public String deleteUser(@RequestParam("id") int id){
+    @GetMapping(value ="/delete-user/{id}")
+    public String deleteUser(@PathVariable("id") int id){
+        System.out.println("Deleting user ....... ....... .......");
         userService.deleteUser(id);
         System.out.println("User deleted with id: "+id);
         return "redirect:/manage-users";

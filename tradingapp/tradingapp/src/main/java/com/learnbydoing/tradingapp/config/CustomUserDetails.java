@@ -1,3 +1,4 @@
+
 package com.learnbydoing.tradingapp.config;
 
 
@@ -15,6 +16,7 @@ import java.util.List;
  * This class encapsulates user information like email, password... required for authentication and authorization
  * UserDetails is a Spring interface to retrieve data in security context
  * */
+
 public class CustomUserDetails implements UserDetails {
 
     private final String username;
@@ -63,3 +65,5 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 }
+
+

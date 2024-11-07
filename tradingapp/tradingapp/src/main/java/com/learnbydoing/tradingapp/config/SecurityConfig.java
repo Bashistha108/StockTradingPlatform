@@ -1,3 +1,4 @@
+
 package com.learnbydoing.tradingapp.config;
 
 import com.learnbydoing.tradingapp.service.CustomUserDetailsService;
@@ -33,6 +34,8 @@ public class SecurityConfig {
                         //.requestMatchers("/users/delete-user/**").authenticated()    // Changed this
                         //.requestMatchers("/manage-users").authenticated()
                         .requestMatchers("/admin/**").permitAll()
+                        .requestMatchers("/stock-price").permitAll()
+
                         .requestMatchers("/users/delete-user/**").permitAll()
                         .requestMatchers("/manage-users").permitAll()
                         .requestMatchers("/", "/users/*", "/login-page", "/access-denied", "/users/**").permitAll()
@@ -70,3 +73,4 @@ public class SecurityConfig {
     }
 
 }
+

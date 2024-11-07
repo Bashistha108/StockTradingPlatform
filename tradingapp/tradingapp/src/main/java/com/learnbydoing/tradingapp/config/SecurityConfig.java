@@ -29,13 +29,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
             http
                 .authorizeHttpRequests(configurer -> configurer
-                        //.requestMatchers("/").hasAnyRole("Admin", "Trader")
-                       // .requestMatchers("/login-page", "/access-denied").permitAll()
-                      //  .requestMatchers("/manage-users", "/admin-home", "/users/*").hasRole("Admin")
-                        .requestMatchers("/admin/**").hasRole("Admin")        // If using /admin prefix
-                        .requestMatchers("/users/delete-user/**").authenticated()    // Changed this
-                        .requestMatchers("/manage-users").authenticated()
-                        .requestMatchers("/", "/users/*", "/login-page", "/access-denied").permitAll()
+                        //.requestMatchers("/admin/**").hasRole("Admin")        // If using /admin prefix
+                        //.requestMatchers("/users/delete-user/**").authenticated()    // Changed this
+                        //.requestMatchers("/manage-users").authenticated()
+                        .requestMatchers("/admin/**").permitAll()
+                        .requestMatchers("/users/delete-user/**").permitAll()
+                        .requestMatchers("/manage-users").permitAll()
+                        .requestMatchers("/", "/users/*", "/login-page", "/access-denied", "/users/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

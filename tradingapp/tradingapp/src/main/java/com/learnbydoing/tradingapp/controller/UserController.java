@@ -36,20 +36,32 @@ public class UserController {
         return "redirect:/manage-users";
     }
 
-    @GetMapping("/add-update-user-form")
+    @GetMapping("/add-user-form")
     public String showFormForAddUpdate(Model model){
         UserForm userForm = new UserForm();
         model.addAttribute("userForm", userForm);
         return "admin/admin-users-add-update";
     }
 
-    @GetMapping(value ="/delete-user/{id}")
+    @GetMapping("/update-user-form")
+    public String showFormForUpdate(Model model, @RequestParam("userId") int id){
+        User user = userService.getUserById(id);
+        UserType userType = user.getUserType();
+        UserForm userForm = new UserForm();
+        userForm.setUser(user);
+        userForm.setUserType(userType);
+        model.addAttribute("userForm", userForm);
+        return "admin/admin-users-add-update";
+    }
+
+    @GetMapping(value = "/delete-user/{id}")
     public String deleteUser(@PathVariable("id") int id){
         System.out.println("Deleting user ....... ....... .......");
         userService.deleteUser(id);
         System.out.println("User deleted with id: "+id);
         return "redirect:/manage-users";
     }
+
 
    public class UserForm{
         private User user;

@@ -95,7 +95,7 @@
 		</dependency>
 
 		-->
-		 <!-- JSON processing dependency (for handling JSON data) -->
+		 <!-- JSON processing dependency (for handling JSON data), For getting just the live stock price instead of complete JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

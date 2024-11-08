@@ -6,5 +6,10 @@
 </head>
 <body>
     <h1>Welcome to Stock Trading App</h1>
+    <form action="#" th:action="@{/search}" method="POST">
+        <label for="symbol">Enter Stock Symbol</label>
+        <input type="text" id="symbol" name="symbol" required>
+        <button type="submit">Search</button>
+    </form>
 </body>
 </html>

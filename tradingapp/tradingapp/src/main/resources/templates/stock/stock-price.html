@@ -4,25 +4,29 @@
     <meta charset="UTF-8">
     <title>Live Stock Price</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/stock.css">
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">Live Stock Price</h1>
-    <form th:action="@{/stock-price}" method="GET" class="form-inline mt-3">
-        <div class="form-group">
-            <input type="text" name="symbol" class="form-control" placeholder="Enter Stock Symbol" required>
-            <button type="submit" class="btn btn-primary ml-2">Get Price</button>
-        </div>
-    </form>
+    <h1 class="mt-5 text-center">Live Stock Price</h1>
 
-    <!-- Displaying Stock Price Data -->
-    <div th:if="${stockPriceData != null}" class="mt-5">
-        <h3>Stock Price for <span th:text="${symbol}"></span></h3>
-        <pre th:text="${stockPriceData}"></pre>
+    <!-- Display Stock Price and Action Buttons -->
+    <div th:if="${stockData != null}" class="mt-5 text-center">
+        <h3>Stock Price for: <span th:text="${symbol}">AAPL</span></h3>
+        <p>Current Price: <span th:text="${stockData}">Loading...</span></p>
+
+        <!-- Buy and Sell Buttons with Blinking Effect -->
+        <div class="price-container">
+          <!--  <button class="price-btn buy-blink">Buy</button>
+            <button class="price-btn sell-blink">Sell</button>
+            -->
+            <button>Buy</button>
+            <button>Sell</button>
+        </div>
     </div>
 
-    <!-- If no stock price data is available -->
-    <div th:if="${stockPriceData == null}" class="mt-5">
+    <!-- No Stock Price Data Available Message -->
+    <div th:if="${stockData == null}" class="mt-5 text-center">
         <p>No stock price data available. Please enter a valid stock symbol.</p>
     </div>
 </div>

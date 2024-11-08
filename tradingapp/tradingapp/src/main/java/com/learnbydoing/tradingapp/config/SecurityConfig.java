@@ -30,11 +30,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
             http
                 .authorizeHttpRequests(configurer -> configurer
-                        //.requestMatchers("/admin/**").hasRole("Admin")        // If using /admin prefix
-                        //.requestMatchers("/users/delete-user/**").authenticated()    // Changed this
-                        //.requestMatchers("/manage-users").authenticated()
                         .requestMatchers("/admin/**").permitAll()
-                        .requestMatchers("/stock-price").permitAll()
+                        .requestMatchers("/search/**").permitAll()
+
+                        //to allow the css files to render properly
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
 
                         .requestMatchers("/users/delete-user/**").permitAll()
                         .requestMatchers("/manage-users").permitAll()

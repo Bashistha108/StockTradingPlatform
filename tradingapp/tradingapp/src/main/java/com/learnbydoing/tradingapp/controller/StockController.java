@@ -4,6 +4,7 @@ import com.learnbydoing.tradingapp.service.StockService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -16,12 +17,12 @@ public class StockController {
     }
 
     // API endpoint to get stock price based on the symbol
-    @GetMapping("/stock-price")
-    public String getStockPrice(@RequestParam String symbol , Model model){
-        String stockPriceData = stockService.getLiveStockPrice(symbol);
-        model.addAttribute("symbol", symbol);
-        model.addAttribute("stockPriceData", stockPriceData);
 
+    @PostMapping("/search")
+    public String searchStock(@RequestParam("symbol") String symbol, Model model){
+        String stockData = stockService.getLiveStockPrice(symbol);
+        model.addAttribute("stockData", stockData);
+        model.addAttribute("symbol", symbol);
         return "stock/stock-price";
     }
 

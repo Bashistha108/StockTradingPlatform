@@ -29,7 +29,7 @@ public class StockService {
     public String getLiveStockPrice(String symbol){
         try{
            //Constructing url to fetch the stock data
-            String url = String.format("%s?function=TIME_SERIES_INTRADAY&symbol=%s&interval=5min&apikey=%s", BASE_URL, symbol, API_KEY);
+            String url = String.format("%s?function=TIME_SERIES_INTRADAY&symbol=%s&interval=30min&apikey=%s", BASE_URL, symbol, API_KEY);
 
             // Fetch JSON response as String
             String jsonResponse = restTemplate.getForObject(url, String.class);
@@ -38,8 +38,13 @@ public class StockService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
 
+            JsonNode errorNode = rootNode.path("Note");
+            if (!errorNode.isMissingNode()) {
+                return "API Rate Limit Exceeded: " + errorNode.asText();
+            }
+
             //Get the time series node
-            JsonNode timeSeries = rootNode.path("Time Series (5min)");
+            JsonNode timeSeries = rootNode.path("Time Series (30min)");
 
             //Get the latest timestamp (latest available price)
             Iterator<String> fieldNames = timeSeries.fieldNames();

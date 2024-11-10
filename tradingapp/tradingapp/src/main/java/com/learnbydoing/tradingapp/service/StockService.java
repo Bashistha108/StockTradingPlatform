@@ -2,10 +2,15 @@ package com.learnbydoing.tradingapp.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.learnbydoing.tradingapp.entity.Stock;
+import com.learnbydoing.tradingapp.repository.StockRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 /**
  * ObjectMapper is used to parse the JSON response into a JsonNode tree.
  * The time series data is retrieved by accessing the Time Series (5min) field in the JSON.
@@ -15,55 +20,50 @@ import java.util.Iterator;
 
 @Service  // Marks this class as a Spring Service, making it available for dependency injection
 public class StockService {
-    private static final String API_KEY = "P7K9NNS5Y4WRFN11";
-    private static final String BASE_URL = "https://www.alphavantage.co/query";
 
-    private final RestTemplate restTemplate;
+    private final StockRepository stockRepository;
 
-    // Constructor to inject the RestTemplate bean
-    public StockService(RestTemplate restTemplate){
-        this.restTemplate = restTemplate;
+    public StockService( StockRepository stockRepository){
+        this.stockRepository = stockRepository;
     }
 
-    // Get live stock price for a given symbol
-    public String getLiveStockPrice(String symbol){
-        try{
-           //Constructing url to fetch the stock data
-            String url = String.format("%s?function=TIME_SERIES_INTRADAY&symbol=%s&interval=30min&apikey=%s", BASE_URL, symbol, API_KEY);
-
-            // Fetch JSON response as String
-            String jsonResponse = restTemplate.getForObject(url, String.class);
-
-            // Parsing the JSON response to extract the latest stock price
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(jsonResponse);
-
-            JsonNode errorNode = rootNode.path("Note");
-            if (!errorNode.isMissingNode()) {
-                return "API Rate Limit Exceeded: " + errorNode.asText();
-            }
-
-            //Get the time series node
-            JsonNode timeSeries = rootNode.path("Time Series (30min)");
-
-            //Get the latest timestamp (latest available price)
-            Iterator<String> fieldNames = timeSeries.fieldNames();
-            String latestTimeStamp = fieldNames.hasNext() ? fieldNames.next() : null;
-
-            if(latestTimeStamp != null){
-                JsonNode latestData = timeSeries.path(latestTimeStamp);
-                //AlphaVantage: 1-open, 2-high, 3-low, 4-close, 5-volume. Specific key for different data points
-                String livePrice = latestData.path("4. close").asText();  //Extract the close price
-                return livePrice;
-            }
-            else {
-                return "Error: No stock data found for symbol " + symbol;
-            }
-
-        }
-        catch (Exception e){
-            return "Error fetching stock data. Please try again later.";
-        }
-
+    public Stock getStockById(int id){
+        return stockRepository.findById(id).orElseThrow(()->new NoSuchElementException());
     }
+
+
+    public Stock getStockBySymbol(String symbol){
+        return stockRepository.findByStockSymbol(symbol);
+    }
+
+    public Stock getStockByName(String name){
+        return stockRepository.findByStockName(name);
+    }
+    public List<Stock> getAllStocks(){
+        return stockRepository.findAll();
+    }
+
+    public Stock addStock(Stock stock){
+        return stockRepository.save(stock);
+    }
+
+    public Stock updateStock(int id, Stock stock){
+        if(stockRepository.existsById(id)){
+            stock.setId(id);
+            return stockRepository.save(stock);
+        }
+        return null;
+    }
+
+    public boolean deleteStock(int id){
+        if(stockRepository.existsById(id)){
+            stockRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
+
+
+
 }

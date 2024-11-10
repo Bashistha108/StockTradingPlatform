@@ -43,6 +43,10 @@ public class StockService {
         return stockRepository.findAll();
     }
 
+    public int getStockIdBySymbol(String symbol){
+        return stockRepository.findByStockSymbol(symbol).getId();
+    }
+
     public Stock addStock(Stock stock){
         return stockRepository.save(stock);
     }

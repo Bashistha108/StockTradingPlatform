@@ -13,4 +13,5 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     Stock findByStockName(String name);
 
 
+
 }

@@ -1,7 +1,8 @@
- package com.learnbydoing.tradingapp.service;
-
+package com.learnbydoing.tradingapp.service;
+import com.learnbydoing.tradingapp.entity.Stock;
 import com.learnbydoing.tradingapp.entity.StockPriceHistory;
 import com.learnbydoing.tradingapp.repository.StockPriceHistoryRepository;
+import com.learnbydoing.tradingapp.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,34 +10,32 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
- @Service
+@Service
 public class StockPriceHistoryServiceImpl implements StockPriceHistoryService{
 
     private final StockPriceHistoryRepository stockPriceHistoryRepository;
-    private final AlphaVantageClient alphaVantageClient;
-    private final StockService stockService;
+    private final StockRepository stockRepository;
+    private final AlphaVantageService alphaVantageService;
 
     @Autowired
-    public StockPriceHistoryServiceImpl(StockPriceHistoryRepository stockPriceHistoryRepository, StockService stockService, AlphaVantageClient alphaVantageClient){
+    public StockPriceHistoryServiceImpl(StockPriceHistoryRepository stockPriceHistoryRepository,
+                                        StockRepository stockRepository,
+                                        AlphaVantageService alphaVantageService) {
         this.stockPriceHistoryRepository = stockPriceHistoryRepository;
-        this.alphaVantageClient = alphaVantageClient;
-        this.stockService =stockService;
+        this.stockRepository = stockRepository;
+        this.alphaVantageService = alphaVantageService;
     }
 
     @Override
     @Transactional
     public void updateStockPriceHistory(String stockSymbol) {
-        // Fetch historical prices from Alpha Vantage
-        List<StockPriceHistory> historyData = alphaVantageClient.getHistoricalPrices(stockSymbol);
-
-        // Assume Stock ID can be derived from stock symbol
-        int stockId = stockService.getStockIdBySymbol(stockSymbol);
-
-        // Save each historical record in the repository
-        for (StockPriceHistory record : historyData) {
-            record.setStockId(stockId);
-            stockPriceHistoryRepository.save(record);
+        // Retrieve stock entity using stock symbol
+        Stock stock = stockRepository.findByStockSymbol(stockSymbol);
+        if (stock == null) {
+            throw new NoSuchElementException("Stock with symbol " + stockSymbol + " not found.");
         }
+        // Use AlphaVantageService to fetch and store historical data. Will also save to the db
+        alphaVantageService.fetchAndStoreHistoricalData(stockSymbol);
     }
 
     @Override
@@ -44,3 +43,33 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService{
         return stockPriceHistoryRepository.findByStockId(stockId);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

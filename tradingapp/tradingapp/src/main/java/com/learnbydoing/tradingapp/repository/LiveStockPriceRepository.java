@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LiveStockPriceRepository extends JpaRepository<LiveStockPrice, Integer> {
+    public LiveStockPrice findByStockId(int stockId);
 }

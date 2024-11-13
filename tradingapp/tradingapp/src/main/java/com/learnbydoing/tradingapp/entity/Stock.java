@@ -2,6 +2,8 @@ package com.learnbydoing.tradingapp.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "stocks")
 public class Stock {
@@ -17,6 +19,11 @@ public class Stock {
 
     @Column(name = "stock_symbol")
     private String stockSymbol;
+
+
+    // Bidirectional mapping to StockPriceHistory
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockPriceHistory> priceHistory;
 
     public Stock() {
     }
@@ -48,6 +55,14 @@ public class Stock {
 
     public void setStockSymbol(String stockSymbol) {
         this.stockSymbol = stockSymbol;
+    }
+
+    public List<StockPriceHistory> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(List<StockPriceHistory> priceHistory) {
+        this.priceHistory = priceHistory;
     }
 
     @Override

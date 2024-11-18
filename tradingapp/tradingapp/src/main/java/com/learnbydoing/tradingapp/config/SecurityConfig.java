@@ -47,7 +47,13 @@ public class SecurityConfig {
                         .successHandler(customAuthenticationSuccessHandler)  // WHen authentication successfull go the customAuthenticationSUccessHandler
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll())
+                    .logout(logout -> logout
+                            .logoutUrl("/logout") // Define logout URL (default is "/logout")
+                            .logoutSuccessUrl("/login-page?logout") // Redirect after successful logout
+                            .invalidateHttpSession(true) // Invalidate session
+                            .deleteCookies("JSESSIONID") // Remove session cookie
+                            .permitAll() // Allow all users to log out
+                    )
                 .exceptionHandling(configurer -> configurer .accessDeniedPage("/access-denied"))
                     .csrf(csrf->csrf.disable());
 

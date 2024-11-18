@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * ObjectMapper is used to parse the JSON response into a JsonNode tree.
@@ -57,6 +58,19 @@ public class StockService {
             return stockRepository.save(stock);
         }
         return null;
+    }
+
+    public void saveAndUpdateStock(Stock stock){
+        //Check if the stock exists
+        if(stock.getId() != null){
+            Stock tempStock = getStockById(stock.getId());
+            tempStock.setStockName(stock.getStockName());
+            tempStock.setStockSymbol(stock.getStockSymbol());
+            stockRepository.save(stock);
+            System.out.println("Stock updated with id: "+stock.getId());
+        }else{
+            stockRepository.save(stock);
+        }
     }
 
     public boolean deleteStock(int id){

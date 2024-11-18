@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             response.sendRedirect("/admin-home");
         }
         else{
-            response.sendRedirect("/trader-home");
+            response.sendRedirect("/");
         }
     }
 }

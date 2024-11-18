@@ -11,7 +11,7 @@ public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stock_id")
-    private int id;
+    private Integer id;
 
 
     @Column(name = "stock_name")
@@ -22,7 +22,7 @@ public class Stock {
 
 
     // Bidirectional mapping to StockPriceHistory
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<StockPriceHistory> priceHistory;
 
     public Stock() {
@@ -33,11 +33,11 @@ public class Stock {
         this.stockSymbol = stockSymbol;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

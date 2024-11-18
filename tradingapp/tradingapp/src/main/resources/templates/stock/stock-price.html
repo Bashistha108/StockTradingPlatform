@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Live Stock Price</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/stock.css">
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5 text-center">Live Stock Price</h1>
+
+    <h1>Live Stock Price</h1>
+
 
     <!-- Display Stock Price and Action Buttons -->
-    <div th:if="${stockData != null}" class="mt-5 text-center">
+    <div th:if="${currentPrice != null}">
         <h3>Stock Price for: <span th:text="${symbol}">AAPL</span></h3>
-        <p>Current Price: <span th:text="${stockData}">Loading...</span></p>
+        <p>Current Price: <span th:text="${currentPrice}">Loading...</span></p>
 
-        <!-- Buy and Sell Buttons with Blinking Effect -->
-        <div class="price-container">
-          <!--  <button class="price-btn buy-blink">Buy</button>
-            <button class="price-btn sell-blink">Sell</button>
-            -->
+        <div>
             <button>Buy</button>
             <button>Sell</button>
         </div>
     </div>
-
+    <br>
     <!-- No Stock Price Data Available Message -->
-    <div th:if="${stockData == null}" class="mt-5 text-center">
+    <div th:if="${currentPrice == null}">
         <p>No stock price data available. Please enter a valid stock symbol.</p>
     </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <form th:action="@{/stocks/update/{symbol}(symbol=${symbol})}" method="POST">
+        <input type="submit" value="Update">
+    </form>
+    <br>
+    <a href="#">Add to watchlist</a>
+    <p>News: </p>
+    <br>
+    <a th:href="@{/}">Home</a>
 </body>
 </html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Management</title>
+</head>
+<body>
+<h1>Stock Management</h1>
+<br>
+
+<!-- Add Stock Form -->
+<form th:action="@{/stocks/add-form}" method="GET">
+    <input type="submit" value="Add Stock +">
+</form>
+<br><br>
+
+<!-- Stock Table -->
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Stock Name</th>
+        <th>Ticker Symbol</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="stock : ${stocks}">
+        <td th:text="${stock.id}"></td>
+        <td th:text="${stock.stockName}"></td>
+        <td th:text="${stock.stockSymbol}"></td>
+        <td>
+            <a th:href="@{/stocks/delete-stock/{id}(id=${stock.id})}">Delete</a>
+            <a th:href="@{/stocks/update-form/{stockId}(stockId = ${stock.id})}">Update</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+</body>
+</html>

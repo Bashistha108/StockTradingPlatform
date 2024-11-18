@@ -7,6 +7,12 @@
 <body>
     <h1>Administration</h1>
     <a th:href="@{/manage-users}">Manage Users</a>
+    <br><br>
+    <footer>
+        <form th:action="@{/logout}" method="POST">
+            <button type="submit" >Logout</button>
+        </form>
+    </footer>
 
 
 </body>

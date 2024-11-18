@@ -6,10 +6,23 @@
 </head>
 <body>
     <h1>Welcome to Stock Trading App</h1>
-    <form action="#" th:action="@{/search}" method="POST">
+    <form action="#" th:action="@{/stocks/search}" method="POST">
         <label for="symbol">Enter Stock Symbol</label>
-        <input type="text" id="symbol" name="symbol" required>
+        <input type="text" id="symbol" name="symbol" required> <!-- name ="symbol for the @RequestParam in /search" -->
         <button type="submit">Search</button>
     </form>
+    <br><br>
+    <h3>Current balance: 0</h3>
+    <h3>Total Invested: 0</h3>
+    <h3>Profit/Loss: 0</h3>
+    <br><br>
+
+    <footer>
+        <form th:action="@{/logout}" method="POST">
+            <button type="submit" >Logout</button>
+        </form>
+    </footer>
+
+
 </body>
 </html>

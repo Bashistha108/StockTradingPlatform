@@ -19,16 +19,18 @@ public class StockPriceController {
 
     private final AlphaVantageService alphaVantageService;
     private final StockPriceHistoryService stockPriceHistoryService;
+    private final StockService stockService;
 
     @Autowired
-    public StockPriceController(AlphaVantageService alphaVantageService, StockPriceHistoryService stockPriceHistoryService){
+    public StockPriceController(AlphaVantageService alphaVantageService, StockPriceHistoryService stockPriceHistoryService, StockService stockService){
         this.alphaVantageService = alphaVantageService;
         this.stockPriceHistoryService = stockPriceHistoryService;
+        this.stockService = stockService;
     }
 
 
     // API endpoint to get stock price based on the symbol
-
+    // POST: Search for Stock
     @PostMapping("/search")
     public String searchStock(@RequestParam("symbol") String symbol, Model model){
         //update the live price in the db
@@ -41,6 +43,24 @@ public class StockPriceController {
         return "stock/stock-price";
     }
 
+    @PostMapping("/update/{symbol}")
+    public String updateHistoricalData(@PathVariable("symbol") String symbol) {
+        try {
+            stockPriceHistoryService.updateStockPriceHistory(symbol);
+            System.out.println("Historical data updated successfully for the symbol: "+symbol);
+        } catch (Exception e){
+            System.out.println("Failed to update historical data for symbol: "+symbol+"-"+e.getMessage());
+        }
+        return "redirect:/stocks/search/"+symbol;
+    }
+    // GET: Display Search Results
+    @GetMapping("/search/{symbol}")
+    public String showStockPricePageSupporter(@PathVariable("symbol") String symbol, Model model){
+        double currentPrice = alphaVantageService.getLiveStockPrice(symbol).getCurrentPrice();
+        model.addAttribute("currentPrice", currentPrice);
+        model.addAttribute("symbol", symbol);
+        return "stock/stock-price";
+    }
 
 //    @GetMapping("/live/{symbol}")
 //    public LiveStockPrice getLivePrice(@PathVariable String symbol){
@@ -51,21 +71,12 @@ public class StockPriceController {
 //    }
 
 
-    @PostMapping("/update/{symbol}")
-    public String updateHistoricalData(@PathVariable("symbol") String symbol) {
-        try {
-            stockPriceHistoryService.updateStockPriceHistory(symbol);
-            System.out.println("Historical data updated successfully for the symbol: "+symbol);
-        } catch (Exception e){
-            System.out.println("Failed to update historical data for symbol: "+symbol+"-"+e.getMessage());
-        }
-        return "redirect:/stocks/search";
-    }
 
-    @GetMapping("/{stockId}")
-    public List<StockPriceHistory> getHistoricalData(@PathVariable int stockId){
-        return stockPriceHistoryService.getStockPriceHistory(stockId);
-    }
+//    @GetMapping("/{symbol}")
+//    public List<StockPriceHistory> getHistoricalData(@PathVariable String symbol){
+//        int stockId = stockService.getStockIdBySymbol(symbol);
+//        return stockPriceHistoryService.getStockPriceHistory(stockId);
+//    }
 
 }
 

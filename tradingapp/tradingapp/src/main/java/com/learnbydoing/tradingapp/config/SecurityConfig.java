@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
 
                         .requestMatchers("/users/delete-user/**").permitAll()
-                        .requestMatchers("/manage-users", "/stocks/**", "/stocks/search/**", "stocks/history/**").permitAll()
+                        .requestMatchers("/manage-users", "/stocks/**", "/stocks/search/**", "/stocks/history/**", "/stocks/update/**").permitAll()
                         .requestMatchers("/", "/users/*", "/login-page", "/access-denied", "/users/**").permitAll()
                         .anyRequest().authenticated()
                 )

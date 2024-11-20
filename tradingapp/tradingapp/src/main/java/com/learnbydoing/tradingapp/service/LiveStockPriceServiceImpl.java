@@ -10,12 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class LiveStockPriceServiceImpl implements LiveStockPriceService{
 
     private final LiveStockPriceRepository liveStockPriceRepository;
-    private final AlphaVantageClient alphaVantageClient;
+//    private final AlphaVantageClient alphaVantageClient;
     private final StockService stockService;
+    private final FinnhubService finnhubService;
     @Autowired
-    public LiveStockPriceServiceImpl(LiveStockPriceRepository liveStockPriceRepository, AlphaVantageClient alphaVantageClient, StockService stockService){
+    public LiveStockPriceServiceImpl(LiveStockPriceRepository liveStockPriceRepository, FinnhubService finnhubService , StockService stockService){
         this.liveStockPriceRepository = liveStockPriceRepository;
-        this.alphaVantageClient = alphaVantageClient;
+        this.finnhubService = finnhubService;
         this.stockService = stockService;
     }
 
@@ -23,8 +24,8 @@ public class LiveStockPriceServiceImpl implements LiveStockPriceService{
     @Override
     @Transactional
     public void updateLiveStockPrice(String stockSymbol) {
-        //Fetch live price from Alpha Vantage
-        double currentPrice = alphaVantageClient.getLivePrice(stockSymbol);
+        //Fetch live price from Finnhub
+        double currentPrice = finnhubService.getLivePrice(stockSymbol);
 
         int stockId = stockService.getStockIdBySymbol(stockSymbol);
 

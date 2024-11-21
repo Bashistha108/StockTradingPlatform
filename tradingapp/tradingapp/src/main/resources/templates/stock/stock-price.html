@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Live Stock Price</title>
+
 </head>
 <body>
 
@@ -11,12 +12,12 @@
 
     <!-- Display Stock Price and Action Buttons -->
     <div th:if="${currentPrice != null}">
-        <h3>Stock Price for: <span th:text="${symbol}">AAPL</span></h3>
-        <p>Current Price: <span th:text="${currentPrice}">Loading...</span></p>
+        <h3>Stock Price for: <span id="stock-symbol" th:text="${symbol}">Symbol</span></h3>
+        <p>Current Price: <span id="live-price" th:text="${currentPrice}">Loading...</span></p>
 
         <div>
-            <button>Buy</button>
-            <button>Sell</button>
+            <button id="buy-button">Buy</button>
+            <button id="sell-button">Sell</button>
         </div>
     </div>
     <br>
@@ -36,3 +37,25 @@
     <a th:href="@{/}">Home</a>
 </body>
 </html>
+<!-- Added script here so that all the id give above will be loaded first before running  the script -->
+<script src="/js/live-price.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

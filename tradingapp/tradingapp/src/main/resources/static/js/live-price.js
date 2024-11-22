@@ -12,28 +12,32 @@ if (stockSymbol) {
 
     // Event: When the WebSocket connection is successfully opened
     socket.addEventListener("open", () => {
-        console.log("Connected to Finnhub WebSocket JS ---------------------------------");
+        console.log("Connected to Finnhub WebSocket JS ###########");
+
         // Send a subscription message to the WebSocket for the given stock symbol
         // Finnhub expects this format to subscribe to a specific stock ticker
         socket.send(JSON.stringify({ type: "subscribe", symbol: stockSymbol }));
     });
 
 // Event: When the WebSocket receives a new message
-    socket.addEventListener("message", (event) => {
-        // Parse the incoming data from the WebSocket
-        const data = JSON.parse(event.data);
+    socket.addEventListener("message", async (event) => {
+        try {
+            // Parse the incoming data from the WebSocket
+            const data = JSON.parse(event.data);
 
-        // Check if the message contains trade data (type "trade")
-        if (data.type === "trade") {
-            // Finnhub provides trade data as an array; we pick the first one
-            const tradeData = data.data[0];
+            // Check if the message contains trade data (type "trade")
+            if (data.type === "trade") {
+                const tradeData = data.data[0];
 
-            // Ensure the trade data matches the requested stock symbol
-            if (tradeData && tradeData.s === stockSymbol) {
-                // Update the live price on the HTML page with the trade price
-                // `p` is the price field in Finnhub's response
-                livePriceElement.textContent = tradeData.p.toFixed(2); // Display with two decimal places
+                // Ensure the trade data matches the requested stock symbol
+                if (tradeData && tradeData.s === stockSymbol) {
+                    // Update the live price on the HTML page with the trade price
+                    livePriceElement.textContent = tradeData.p.toFixed(2); // Display with two decimal places
+
+                }
             }
+        } catch (error) {
+            console.error("Error processing WebSocket message:", error);
         }
     });
 

@@ -125,6 +125,12 @@ public class FinnhubService {
     }
 
     public double getLivePrice(String stockSymbol){
+//        int stockId = stockService.getStockIdBySymbol(stockSymbol);
+//        LiveStockPrice liveStockPrice = liveStockPriceRepository.findByStockId(stockId);
+//        double currentPrice = finnhubClient.getLivePrice(stockSymbol);
+//        liveStockPrice.setCurrentPrice(currentPrice);
+//        liveStockPrice.setLastUpdated(String.valueOf(new Timestamp(System.currentTimeMillis())));
+//        liveStockPriceRepository.save(liveStockPrice);
         return finnhubClient.getLivePrice(stockSymbol);
     }
 

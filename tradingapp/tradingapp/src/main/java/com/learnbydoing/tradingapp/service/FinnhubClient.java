@@ -34,6 +34,12 @@ public class FinnhubClient {
             //Parse the response Json to extract the live price
             JsonNode root = objectMapper.readTree(response);
             double currentPrice = root.path("c").asDouble(); // "c" is the current price in Finnhub API response
+            System.out.println("-----------------------------------");
+            System.out.println("-----------------------------------");
+            System.out.println("Live price for "+stockSymbol+": "+currentPrice);
+            System.out.println("-----------------------------------");
+            System.out.println("-----------------------------------");
+
             return currentPrice;
         }catch (Exception e){
             System.err.println("Error fetching live price for symbol: "+stockSymbol+". Error: "+e.getMessage());

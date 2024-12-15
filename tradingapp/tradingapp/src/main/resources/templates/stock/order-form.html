@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+
+    <!-- Link to Bootstrap CSS (for styling) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Stock Trading</h1>
+
+    <!-- Thymeleaf Form -->
+    <form action="#" th:action="@{/transactions/buy-sell}" method="post">
+
+        <input type="hidden" th:name="userId" th:value="${userId}">
+        <input type="hidden" th:name="stockId" th:value="${stockId}">
+
+        <input type="hidden" th:name="currentPrice" th:value="${currentPrice}">  <!-- Add current price as hidden input -->
+
+
+
+        <!-- Input Fields for Quantity and Amount -->
+        <div class="form-group mt-3">
+            <label for="quantityInputField">Enter Quantity</label>
+            <input type="number" class="form-control" id="quantityInputField" name="quantity" placeholder="Enter Quantity" value="${quantity}" step="any">
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="amountInputField">Enter Amount</label>
+            <input type="number" class="form-control" id="amountInputField" name="amount" placeholder="Enter Amount" value="${amount}" step="any">
+        </div>
+
+
+        <!-- Buttons for buying and selling -->
+        <div class="mt-3">
+            <button type="submit" class="btn btn-success" name="transactionType" value="BUY">Buy</button>
+            <button type="submit" class="btn btn-danger" name="transactionType" value="SELL">Sell</button>
+        </div>
+    </form>
+</div>
+
+<!-- Add Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript for Auto-Populating Quantity/Amount -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get current price from hidden input field
+        const currentPrice = parseFloat(document.querySelector('input[name="currentPrice"]').value);
+
+        // Get elements
+        const quantityInput = document.getElementById('quantityInputField');
+        const amountInput = document.getElementById('amountInputField');
+
+        // When Quantity is entered, calculate Amount
+        quantityInput.addEventListener('input', function() {
+            const quantity = parseFloat(quantityInput.value);
+            if (!isNaN(quantity) && quantity > 0) {
+                const amount = quantity * currentPrice;  // Calculate amount
+                amountInput.value = amount.toFixed(2);  // Auto-populate amount field
+            } else {
+                amountInput.value = '';  // Clear amount field if quantity is invalid
+            }
+        });
+
+        // When Amount is entered, calculate Quantity
+        amountInput.addEventListener('input', function() {
+            const amount = parseFloat(amountInput.value);
+            if (!isNaN(amount) && amount > 0) {
+                const quantity = amount / currentPrice;  // Calculate quantity
+                quantityInput.value = quantity.toFixed(2);  // Auto-populate quantity field
+            } else {
+                quantityInput.value = '';  // Clear quantity field if amount is invalid
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

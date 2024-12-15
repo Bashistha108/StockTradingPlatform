@@ -1,5 +1,5 @@
 package com.learnbydoing.tradingapp.enums;
 
 public enum TransactionType {
-    BUY, SELL
+    BUY, SELL,DEBIT,CREDIT
 }

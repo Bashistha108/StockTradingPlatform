@@ -60,3 +60,52 @@ if (stockSymbol) {
     // If no stock symbol is provided, log an error to the console
     console.error("No stock symbol provided");
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+        const stockSymbol = document.getElementById('stockSymbol');
+        const stockPrice = document.getElementById('stockPrice');
+        const buyBtn = document.getElementById('buyBtn');
+        const sellBtn = document.getElementById('sellBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const watchlistBtn = document.getElementById('watchlistBtn');
+
+        // Price color logic
+        function updatePriceColor() {
+            const price = parseFloat(stockPrice.textContent.replace('$', ''));
+            stockPrice.classList.remove('positive', 'negative');
+
+            if (price > 0) {
+                stockPrice.classList.add('positive');
+            } else if (price < 0) {
+                stockPrice.classList.add('negative');
+            }
+        }
+
+        // Simulate price update
+        function updatePrice() {
+            const currentPrice = parseFloat(stockPrice.textContent.replace('$', ''));
+            const variation = (Math.random() * 10 - 5).toFixed(2);
+            const newPrice = (currentPrice + parseFloat(variation)).toFixed(2);
+            stockPrice.textContent = `$${newPrice}`;
+            updatePriceColor();
+        }
+
+        // Button click effects
+        function addButtonEffect(button) {
+            button.addEventListener('click', () => {
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 100);
+            });
+        }
+
+        // Add effects to buttons
+        [buyBtn, sellBtn, updateBtn, watchlistBtn].forEach(addButtonEffect);
+
+        // Update price button
+        updateBtn.addEventListener('click', updatePrice);
+
+        // Initialize price color
+        updatePriceColor();
+    });

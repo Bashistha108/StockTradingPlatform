@@ -30,15 +30,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
             http
                 .authorizeHttpRequests(configurer -> configurer
-                        .requestMatchers("/admin/**").permitAll()
-                        .requestMatchers("/search/**").permitAll()
+                        .requestMatchers("/admin/**","/manage-users","/users/delete-user/**").hasRole("Admin")
 
                         //to allow the css files to render properly
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
 
-                        .requestMatchers("/users/delete-user/**").permitAll()
-                        .requestMatchers("/manage-users", "/stocks/**", "/stocks/search/**", "/stocks/history/**", "/stocks/update/**").permitAll()
-                        .requestMatchers("/", "/users/*", "/login-page", "/access-denied", "/users/**").permitAll()
+                        .requestMatchers("/portfolio/**","/stocks/**","/users/**","/", "/search/**").hasAnyRole("Admin", "Trader")
+
+                        .requestMatchers("/login-page", "/access-denied","/transactions/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

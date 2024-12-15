@@ -96,6 +96,8 @@ public class StockController {
         stockService.deleteStock(id);
         return "redirect:/stocks/manage-stocks";
     }
+
+
 }
 
 

@@ -1,28 +1,358 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Stock Trading App</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Welcome to Stock Trading App</h1>-->
+
+<!--    &lt;!&ndash; Display logged in user's email &ndash;&gt;-->
+<!--    <h3>Logged in as: <span sec:authentication="principal.username"></span></h3>-->
+
+<!--    <form action="#" th:action="@{/stocks/search}" method="POST">-->
+<!--        <label for="symbol">Enter Stock Symbol</label>-->
+<!--        <input type="text" id="symbol" name="symbol" required> &lt;!&ndash; name ="symbol for the @RequestParam in /search" &ndash;&gt;-->
+<!--        <button type="submit">Search</button>-->
+<!--    </form>-->
+<!--    <br><br>-->
+<!--    <h3>Current balance: 0</h3>-->
+<!--    <h3>Total Invested: 0</h3>-->
+<!--    <h3>Profit/Loss: 0</h3>-->
+<!--    <br><br>-->
+
+<!--    <footer>-->
+<!--        <form th:action="@{/logout}" method="POST">-->
+<!--            <button type="submit" >Logout</button>-->
+<!--        </form>-->
+<!--    </footer>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Stock Trading Dashboard</title>-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">-->
+<!--    <style>-->
+
+<!--        :root {-->
+<!--            &#45;&#45;primary-color: #4a90e2;-->
+<!--            &#45;&#45;secondary-color: #2c3e50;-->
+<!--            &#45;&#45;background-color: #f4f6f9;-->
+<!--        }-->
+
+
+<!--        body {-->
+<!--            background-color: var(&#45;&#45;background-color);-->
+<!--            font-family: 'Roboto', sans-serif;-->
+<!--            color: var(&#45;&#45;secondary-color);-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            max-width: 1200px;-->
+<!--            padding: 30px;-->
+<!--            background-color: white;-->
+<!--            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);-->
+<!--            border-radius: 10px;-->
+<!--            margin-top: 50px;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        .top-right-badge {-->
+<!--            position: absolute;-->
+<!--            top: 15px;-->
+<!--            right: 15px;-->
+<!--            background-color: var(&#45;&#45;primary-color);-->
+<!--            color: white;-->
+<!--            padding: 8px 15px;-->
+<!--            border-radius: 5px;-->
+<!--            font-size: 0.9em;-->
+<!--        }-->
+
+<!--        .header h1 {-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            font-weight: 700;-->
+<!--            margin: 0;-->
+<!--            margin-bottom: 30px;-->
+<!--        }-->
+
+<!--        .search-container {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            margin: 30px 0;-->
+<!--        }-->
+
+<!--        .search-container form {-->
+<!--            display: flex;-->
+<!--            width: 100%;-->
+<!--            max-width: 400px;-->
+<!--        }-->
+
+<!--        #symbol {-->
+<!--            flex-grow: 1;-->
+<!--            margin-right: 10px;-->
+<!--            border-color: var(&#45;&#45;primary-color);-->
+<!--        }-->
+
+<!--        .stats-container {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            background-color: #f8f9fa;-->
+<!--            border-radius: 10px;-->
+<!--            padding: 15px;-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .stats-item {-->
+<!--            flex: 1;-->
+<!--            padding: 0 10px;-->
+<!--        }-->
+
+<!--        .stats-item h3 {-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            font-weight: 700;-->
+<!--            margin-bottom: 5px;-->
+<!--            font-size: 0.9em;-->
+<!--        }-->
+
+<!--        .stats-item p {-->
+<!--            color: var(&#45;&#45;secondary-color);-->
+<!--            font-size: 1.1em;-->
+<!--            margin: 0;-->
+<!--        }-->
+
+<!--        .logout-container {-->
+<!--            position: absolute;-->
+<!--            bottom: 15px;-->
+<!--            right: 15px;-->
+<!--        }-->
+
+<!--        .logout-btn {-->
+<!--            width: auto;-->
+<!--            padding: 5px 15px;-->
+<!--            font-size: 0.9em;-->
+<!--        }-->
+
+<!--        @media (max-width: 768px) {-->
+<!--            .top-right-badge {-->
+<!--                position: static;-->
+<!--                text-align: center;-->
+<!--                margin-bottom: 15px;-->
+<!--                display: block;-->
+<!--            }-->
+
+<!--            .logout-container {-->
+<!--                position: static;-->
+<!--                text-align: center;-->
+<!--                margin-top: 15px;-->
+<!--            }-->
+
+<!--            .container {-->
+<!--                position: relative;-->
+<!--            }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <div class="top-right-badge">-->
+<!--        Logged in as: <span sec:authentication="principal.username"></span>-->
+<!--    </div>-->
+
+<!--    <div class="header">-->
+<!--        <h1>Stock Trading Dashboard</h1>-->
+<!--    </div>-->
+
+<!--    <br><br><br><br>-->
+<!--    <div class="search-container">-->
+<!--        <form action="#" th:action="@{/stocks/search}" method="POST" class="w-100">-->
+<!--            <input type="text" id="symbol" name="symbol" class="form-control" placeholder="Enter Stock Symbol" required>-->
+<!--            <button type="submit" class="btn btn-primary">Search</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <br><br><br><br><br>-->
+<!--    <div class="stats-container">-->
+<!--        <div class="stats-item">-->
+<!--            <h3>Current Balance</h3>-->
+<!--            <p>$0.00</p>-->
+<!--        </div>-->
+<!--        <div class="stats-item">-->
+<!--            <h3>Total Invested</h3>-->
+<!--            <p>$0.00</p>-->
+<!--        </div>-->
+<!--        <div class="stats-item">-->
+<!--            <h3>Profit/Loss</h3>-->
+<!--            <p>$0.00</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <br><br><br>-->
+<!--    <div class="logout-container">-->
+<!--        <form th:action="@{/logout}" method="POST">-->
+<!--            <button type="submit" class="btn btn-danger logout-btn">Logout</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Stock Trading App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+<!--            background-color: #f0f2f5;-->
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1100;
+            margin: 40px 60px;
+            padding: 20px;
+<!--            background: white;-->
+            border-radius: 8px;
+<!--            box-shadow: 0 4px 8px rgba(0,0,0,0.1);-->
+            position: relative; /* Added for absolute positioning of the logout button */
+        }
+        header {
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        input[type="text"], button {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        input[type="text"] {
+            width: 70%;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            border-color: #0056b3;
+        }
+        button {
+            width: 28%;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #003875;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .info {
+            display: flex;
+            justify-content: space-around;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+        .info p {
+            margin: 0;
+        }
+        .info span {
+            font-weight: 600;
+            color: #0056b3;
+        }
+        .logout-button {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width:90px;
+            background-color: #dc3545; /* Bootstrap's .btn-danger color */
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #c82333; /* Darker shade for hover */
+        }
+        @media (max-width: 600px) {
+            input[type="text"], button {
+                width: 100%;
+                margin-top: 10px;
+            }
+            .form-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Stock Trading App</h1>
-    <form action="#" th:action="@{/stocks/search}" method="POST">
-        <label for="symbol">Enter Stock Symbol</label>
-        <input type="text" id="symbol" name="symbol" required> <!-- name ="symbol for the @RequestParam in /search" -->
-        <button type="submit">Search</button>
+<div class="container">
+    <header>
+        <h1>Welcome to Stock Trading App</h1>
+        <br>
+        <h4>Logged in as: <span sec:authentication="principal.username"></span></h4>
+    </header>
+    <main>
+        <div class="form-container">
+            <form action="#" th:action="@{/stocks/search}" method="POST">
+                <input type="text" id="symbol" name="symbol" required placeholder="Stock Symbol">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <br><br>
+        <div>
+            <a th:href="@{/portfolio/}" class="btn btn-success">Portfolio</a>
+        </div>
+        <br><br><br><br><br>
+        <div class="info">
+            <p>Current balance: <span>$0</span></p>
+            <p>Total Invested: <span>$0</span></p>
+            <p>Profit/Loss: <span>$0</span></p>
+        </div>
+    </main>
+    <br><br><br>
+
+
+    <form th:action="@{/logout}" method="POST">
+        <button class="logout-button" type="submit" >Logout</button>
     </form>
-    <br><br>
-    <h3>Current balance: 0</h3>
-    <h3>Total Invested: 0</h3>
-    <h3>Profit/Loss: 0</h3>
-    <br><br>
-
-    <footer>
-        <form th:action="@{/logout}" method="POST">
-            <button type="submit" >Logout</button>
-        </form>
-    </footer>
-
-
+</div>
+<script>
+    document.getElementById('symbol').addEventListener('input', function() {
+        console.log('User is typing:', this.value);
+    });
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+

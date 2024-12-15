@@ -36,8 +36,10 @@ public class StockPriceController {
         //Retrieve and return the updated live price
         LiveStockPrice liveStockPrice = finnhubService.getLiveStockPrice(symbol);
         double currentPrice = liveStockPrice.getCurrentPrice();
+        int stockId = stockService.getStockIdBySymbol(symbol);
         model.addAttribute("currentPrice", currentPrice);
         model.addAttribute("symbol", symbol);
+        model.addAttribute("stockId", stockId);
         return "stock/stock-price";
     }
 

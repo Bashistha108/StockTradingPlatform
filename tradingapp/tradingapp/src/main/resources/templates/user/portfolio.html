@@ -1,0 +1,55 @@
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .wider-buttons .btn {
+            width: 75px;
+            margin: 2px;
+    </style>
+</head>
+<body>
+<div class="container">
+    <br>
+    <h1>Portfolio</h1>
+    <br>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Ticker</th>
+            <th>Total Quantity</th>
+            <th>Average Price</th>
+            <th>Profit/Loss</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="portfolio : ${portfolios}">
+            <td th:text="${portfolio.stock.stockSymbol}"></td>
+            <td th:text="${portfolio.totalQuantity}"></td>
+            <td th:text="${portfolio.averagePrice}"></td>
+            <td>0.0</td>
+            <td class="wider-buttons">
+                <a th:href="@{/transactions/order?stockId={stockId}(stockId=${portfolio.stock.id})}" class="btn btn-success btn-sm">Buy</a>
+
+                <a th:href="@{/transactions/order?stockId={stockId}(stockId=${portfolio.stock.id})}" class="btn btn-danger btn-sm">Sell</a>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br><br>
+    <hr>
+    <h3>Total Profit/Loss: </h3>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

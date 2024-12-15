@@ -39,7 +39,15 @@ public class UserService {
     //Integer instead of int to hold null. int can't hold null, helds  0 instead which may cause confusion
     // Use Optional to avoid null pointer exception and to use isPresent... functions
     public User getUserById(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
+        try {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
+            System.out.println("User: " + user);
+            return user;
+        } catch (NoSuchElementException e) {
+            System.out.println("Exception: " + e.getMessage());
+            throw e;
+        }
     }
 
 

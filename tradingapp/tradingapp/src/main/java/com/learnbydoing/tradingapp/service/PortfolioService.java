@@ -1,87 +1,187 @@
 package com.learnbydoing.tradingapp.service;
+
 import com.learnbydoing.tradingapp.entity.Portfolio;
+
+import com.learnbydoing.tradingapp.entity.PortfolioId;
 import com.learnbydoing.tradingapp.entity.Stock;
 import com.learnbydoing.tradingapp.entity.User;
 import com.learnbydoing.tradingapp.enums.TransactionType;
 import com.learnbydoing.tradingapp.repository.PortfolioRepository;
 import com.learnbydoing.tradingapp.repository.StockRepository;
-import com.learnbydoing.tradingapp.repository.TransactionRepository;
 import com.learnbydoing.tradingapp.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import javax.sound.sampled.Port;
+import java.sql.SQLOutput;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+
 
 @Service
 public class PortfolioService {
 
-    @Autowired
-    private PortfolioRepository portfolioRepository;
+    private final PortfolioRepository portfolioRepository;
+    private final UserRepository userRepository;
+    private final StockRepository stockRepository;
+
+
+    private static final Logger logger = LoggerFactory.getLogger(PortfolioService.class);
+
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    public PortfolioService(PortfolioRepository portfolioRepository, UserRepository userRepository, StockRepository stockRepository){
+        this.portfolioRepository = portfolioRepository;
+        this.userRepository = userRepository;
+        this.stockRepository = stockRepository;
+    }
 
-    @Autowired
-    private StockRepository stockRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
+    public Portfolio findPortfolio(Integer userId, Integer stockId) {
+        return portfolioRepository.findByUserUserIdAndStockId(userId, stockId);
+    }
     @Transactional
-    public void updatePortfolio(Integer userId, Integer stockId, Integer quantity, BigDecimal price, TransactionType transactionType) {
-        // Fetch the portfolio record for the user and stock
-        User user = userRepository.findById(userId).orElseThrow(()->new NoSuchElementException("User not found with id: "+userId));
-        Stock stock = stockRepository.findById(stockId).orElseThrow(()-> new NoSuchElementException("Stock not found with id: "+stockId));
-        Portfolio portfolio = portfolioRepository.findByUserIdAndStockId(userId, stockId)
-                .orElseGet(() -> createNewPortfolio(user, stock));
+    public void updatePortfolio(Integer userId, Integer stockId, double quantity, double price, TransactionType transactionType) {
 
-        // Update portfolio based on transaction type
+        System.out.println("ENtering update Portfolio.............");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new NoSuchElementException("Stock not found with id: " + stockId));
+
+        Portfolio portfolio = portfolioRepository.findByUserUserIdAndStockId(userId, stockId);
+        if(portfolio == null){
+            portfolio = new Portfolio();
+            portfolio.setUser(user);
+            portfolio.setUserId(userId);
+            portfolio.setStock(stock);
+            portfolio.setStockId(stockId);
+            portfolio.setTotalQuantity(quantity);
+
+            logger.info("Saving portfolio: " + portfolio);
+            portfolioRepository.save(portfolio);
+            logger.info("Portfolio saved successfully");
+        }
+
+
         if (transactionType == TransactionType.BUY) {
             updateForBuyTransaction(portfolio, quantity, price);
         } else if (transactionType == TransactionType.SELL) {
             updateForSellTransaction(portfolio, quantity, price);
         }
 
-        // Save updated portfolio record
         portfolioRepository.save(portfolio);
+        System.out.println(portfolio.toString());
+        System.out.println("EXITTTINGNGNGNGNG UPDATE PORTFOLIO................");
+
+
+
     }
 
-    private Portfolio createNewPortfolio(User user, Stock stock) {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setUser(user);
-        portfolio.setStock(stock);
-        portfolio.setTotalQuantity(0);
-        portfolio.setAveragePrice(BigDecimal.ZERO);
-        portfolio.setProfitLoss(BigDecimal.ZERO);
-        return portfolio;
+
+
+
+    @Transactional
+    public Portfolio savePortfolio(Portfolio portfolio) {
+        return portfolioRepository.save(portfolio);
     }
 
-    private void updateForBuyTransaction(Portfolio portfolio, Integer quantity, BigDecimal price) {
-        // Update quantity and calculate average price for buy transaction
-        BigDecimal totalCost = portfolio.getAveragePrice().multiply(BigDecimal.valueOf(portfolio.getTotalQuantity()))
-                .add(price.multiply(BigDecimal.valueOf(quantity)));
-        portfolio.setTotalQuantity(portfolio.getTotalQuantity() + quantity);
-        portfolio.setAveragePrice(totalCost.divide(BigDecimal.valueOf(portfolio.getTotalQuantity()), BigDecimal.ROUND_HALF_UP));
+    @Transactional
+    public void addPortfolio(int userId, int stockId, double quantity) {
+        System.out.println("-----------------");
+        logger.info("Starting addPortfolio with userId: " + userId + ", stockId: " + stockId + ", quantity: " + quantity);
+
+        try {
+            User user = userRepository.findByUserId(userId);
+            if (user == null) {
+                logger.error("No user found with userId: {}", userId);
+                throw new IllegalArgumentException("User not found with userId: " + userId);
+            }
+            logger.info("User fetched successfully: {}", user);
+            Stock stock = stockRepository.findById(stockId).orElseThrow(() -> new IllegalArgumentException("Stock not found"));
+            logger.info("Stock fetched: " + stock);
+
+            Portfolio portfolio = new Portfolio();
+            portfolio.setUser(user);
+            portfolio.setUserId(userId);
+            portfolio.setStock(stock);
+            portfolio.setTotalQuantity(quantity);
+
+            logger.info("Saving portfolio: " + portfolio);
+            portfolioRepository.save(portfolio);
+            logger.info("Portfolio saved successfully");
+        } catch (Exception e) {
+            logger.error("Error fetching user with userId: {}. Error: {}", userId, e.getMessage());
+            throw e;
+        }
+
     }
 
-    private void updateForSellTransaction(Portfolio portfolio, Integer quantity, BigDecimal price) {
+    @Transactional
+    public void deletePortfolio(Portfolio portfolio) {
+        portfolioRepository.delete(portfolio);
+    }
+
+
+    private void updateForBuyTransaction(Portfolio portfolio, double quantity, double price) {
+        double totalCost = price * quantity;
+        double newTotalQuantity = portfolio.getTotalQuantity() + quantity;
+        double updatedAveragePrice = ((portfolio.getAveragePrice() * portfolio.getTotalQuantity()) + totalCost) / newTotalQuantity;
+
+        portfolio.setTotalQuantity(newTotalQuantity);
+        portfolio.setAveragePrice(updatedAveragePrice);
+    }
+
+    private void updateForSellTransaction(Portfolio portfolio, double quantity, double price) {
         if (portfolio.getTotalQuantity() < quantity) {
             throw new IllegalArgumentException("Insufficient stock quantity to sell");
         }
 
-        // Update quantity and calculate profit/loss for sell transaction
-        BigDecimal totalSale = price.multiply(BigDecimal.valueOf(quantity));
-        BigDecimal costPrice = portfolio.getAveragePrice().multiply(BigDecimal.valueOf(quantity));
-        BigDecimal profitLoss = totalSale.subtract(costPrice);
-        portfolio.setTotalQuantity(portfolio.getTotalQuantity() - quantity);
-        portfolio.setProfitLoss(portfolio.getProfitLoss().add(profitLoss));
-    }
+        double totalSale = price * quantity;
+        double costPrice = portfolio.getAveragePrice() * quantity;
+        double profitLoss = totalSale - costPrice;
 
-    public Portfolio getPortfolio(Integer userId, Integer stockId) {
-        return portfolioRepository.findByUserIdAndStockId(userId, stockId)
-                .orElseThrow(() -> new RuntimeException("Portfolio not found"));
+        portfolio.setTotalQuantity(portfolio.getTotalQuantity() - quantity);
+        portfolio.setProfitLoss(portfolio.getProfitLoss() + profitLoss);
+
+        if (portfolio.getTotalQuantity() == 0) {
+            portfolio.setAveragePrice(0.0);
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

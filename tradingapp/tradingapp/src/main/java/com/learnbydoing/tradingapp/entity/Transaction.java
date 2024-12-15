@@ -1,38 +1,41 @@
 package com.learnbydoing.tradingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.learnbydoing.tradingapp.enums.OrderStatus;
 import com.learnbydoing.tradingapp.enums.OrderType;
 import com.learnbydoing.tradingapp.enums.TransactionType;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="transaction_id")
     private Integer transactionId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "stock_id", nullable = false)
+    @JsonIgnore
     private Stock stock;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType transactionType;
 
-    @Column(nullable = false)
-    private Integer quantity;
+    @Column
+    private Double quantity;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private double price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -79,19 +82,19 @@ public class Transaction {
         this.transactionType = transactionType;
     }
 
-    public Integer getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -109,6 +112,21 @@ public class Transaction {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionId=" + transactionId +
+                ", user=" + user.getUserId() +
+                ", stock=" + stock.getId() +
+                ", transactionType=" + transactionType +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", orderType=" + orderType +
+                ", orderStatus=" + orderStatus +
+                ", transactionDate=" + transactionDate +
+                '}';
     }
 
     public LocalDateTime getTransactionDate() {

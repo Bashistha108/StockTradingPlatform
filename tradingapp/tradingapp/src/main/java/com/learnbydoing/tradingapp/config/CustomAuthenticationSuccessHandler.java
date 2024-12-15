@@ -27,6 +27,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             //Custom Logic after successfull authentication like redirecting to page based on role
         if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_ADMIN))){
             response.sendRedirect("/admin-home");
+        }else if(authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_TRADER))){
+            response.sendRedirect("/trader-home");
         }
         else{
             response.sendRedirect("/");

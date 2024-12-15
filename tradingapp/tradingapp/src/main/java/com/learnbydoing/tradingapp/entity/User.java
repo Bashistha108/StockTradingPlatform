@@ -2,11 +2,13 @@ package com.learnbydoing.tradingapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -39,12 +41,18 @@ public class User {
     @Column(name = "profile_photo", length = 255)
     private String profilePhoto;
 
-
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Portfolio> portfolios;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}) //Many users can have one userType
     @JoinColumn(name = "user_type_id")  //referencing the PK of the other table
     private UserType userType;   // Creating a column because it exist as FK
+
+
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private VirtualCurrencyBalance virtualCurrencyBalance;
 
 
     public User() {
@@ -60,6 +68,23 @@ public class User {
         this.lastName = lastName;
         this.profilePhoto = profilePhoto;
         this.userType = userType;
+    }
+
+
+    public List<Portfolio> getPortfolios() {
+        return portfolios;
+    }
+
+    public void setPortfolios(List<Portfolio> portfolios) {
+        this.portfolios = portfolios;
+    }
+
+    public VirtualCurrencyBalance getVirtualCurrencyBalance() {
+        return virtualCurrencyBalance;
+    }
+
+    public void setVirtualCurrencyBalance(VirtualCurrencyBalance virtualCurrencyBalance) {
+        this.virtualCurrencyBalance = virtualCurrencyBalance;
     }
 
     public int getUserId() {
@@ -154,7 +179,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", profilePhoto='" + profilePhoto + '\'' +
-                ", userType=" + userType +
                 '}';
     }
 }

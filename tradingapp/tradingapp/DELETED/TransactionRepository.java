@@ -2,13 +2,10 @@ package com.learnbydoing.tradingapp.repository;
 
 import com.learnbydoing.tradingapp.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
-
-    List<Transaction> findByUser_UserId(int userId);
-
+    // You can add custom queries here if needed, for example:
+    List<Transaction> findByUser_UserId(Integer userId);
 }

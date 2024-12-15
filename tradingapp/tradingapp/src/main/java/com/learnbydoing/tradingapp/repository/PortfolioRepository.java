@@ -1,17 +1,19 @@
 package com.learnbydoing.tradingapp.repository;
 
 import com.learnbydoing.tradingapp.entity.Portfolio;
-import com.learnbydoing.tradingapp.entity.Stock;
-import com.learnbydoing.tradingapp.entity.User;
+import com.learnbydoing.tradingapp.entity.PortfolioId;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
-public interface PortfolioRepository extends JpaRepository<Portfolio, Integer> {
-    Portfolio findByUserAndStock(User user, Stock stock);
-    Optional<Portfolio> findByUserIdAndStockId(int userId, int stockId);
+public interface PortfolioRepository extends JpaRepository<Portfolio, PortfolioId> {
+    // Find all portfolios for a specific user
+    List<Portfolio> findByUserUserId(Integer userId);
 
+    // Find a specific portfolio entry by user and stock
+    // findBy + userId(of user) and stock+stockId
+    Portfolio findByUserUserIdAndStockId(Integer userId, Integer stockId);
+    // Alternatively
+    // @Query("SELECT p FROM Portfolio p WHERE p.user.userId = :userId AND p.stock.stockId = :stockId")
+    // Portfolio findPortfolioByUserIdAndStockId(@Param("userId") Integer userId, @Param("stockId") Integer stockId);
 }

@@ -1,5 +1,6 @@
 package com.learnbydoing.tradingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class Stock {
     // Bidirectional mapping to StockPriceHistory
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
     private List<StockPriceHistory> priceHistory;
+
+    @OneToMany(mappedBy = "stock", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Portfolio> portfolios;
 
     public Stock() {
     }
@@ -60,6 +65,9 @@ public class Stock {
     public List<StockPriceHistory> getPriceHistory() {
         return priceHistory;
     }
+
+
+
 
     public void setPriceHistory(List<StockPriceHistory> priceHistory) {
         this.priceHistory = priceHistory;

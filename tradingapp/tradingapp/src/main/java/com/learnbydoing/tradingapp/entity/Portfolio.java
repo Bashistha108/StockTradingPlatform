@@ -1,39 +1,65 @@
 package com.learnbydoing.tradingapp.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
-import java.math.BigDecimal;
-
+@IdClass(PortfolioId.class)
 @Entity
-public class Portfolio {
+@Table(name = "portfolio")
+public class Portfolio{
+
+
+    /**
+     * USE STPCK SYMBOL INSTEAD OF ID TO AVOID USING PORTFOLIO ID
+     */
+    @Id
+    @Column(name = "user_id")
+    private Integer userId;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @Column(name = "stock_id")
+    private Integer stockId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "stock_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "stock_id", insertable = false, updatable = false)
     private Stock stock;
 
-    private double totalQuantity;
+    @Column(name = "total_quantity", nullable = false)
+    private double totalQuantity = 0.0;
 
-    private BigDecimal averagePrice;
+    @Column(name = "average_price")
+    private double averagePrice;
 
-    private BigDecimal profitLoss;
+    @Column(name = "profit_loss")
+    private double profitLoss;
 
     public Portfolio() {
     }
 
-    public Portfolio(User user, Stock stock, double totalQuantity, BigDecimal averagePrice, BigDecimal profitLoss) {
+    // Constructor
+    public Portfolio(User user, Stock stock, double totalQuantity) {
         this.user = user;
+        this.userId = user.getUserId();
         this.stock = stock;
+        this.stockId = stock.getId();
         this.totalQuantity = totalQuantity;
-        this.averagePrice = averagePrice;
+    }
+
+    public Portfolio(int userId, int stockId, double quantity){
+        this.userId = userId;
+        this.stockId = stockId;
+        this.totalQuantity = quantity;
+    }
+
+    public double getProfitLoss() {
+        return profitLoss;
+    }
+
+    public void setProfitLoss(double profitLoss) {
         this.profitLoss = profitLoss;
     }
 
@@ -61,19 +87,39 @@ public class Portfolio {
         this.totalQuantity = totalQuantity;
     }
 
-    public BigDecimal getAveragePrice() {
+    public double getAveragePrice() {
         return averagePrice;
     }
 
-    public void setAveragePrice(BigDecimal averagePrice) {
+    public void setAveragePrice(double averagePrice) {
         this.averagePrice = averagePrice;
     }
 
-    public BigDecimal getProfitLoss() {
-        return profitLoss;
+    // Add explicit getters/setters for userId and stockId
+    public Integer getUserId() {
+        return this.userId;
     }
 
-    public void setProfitLoss(BigDecimal profitLoss) {
-        this.profitLoss = profitLoss;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getStockId() {
+        return this.stockId;
+    }
+
+    public void setStockId(Integer stockId) {
+        this.stockId = stockId;
+    }
+
+    @Override
+    public String toString() {
+        return "Portfolio{" +
+                "userId=" + userId +
+                ", stockId=" + stockId +
+                ", totalQuantity=" + totalQuantity +
+                ", averagePrice=" + averagePrice +
+                ", profitLoss=" + profitLoss +
+                '}';
     }
 }

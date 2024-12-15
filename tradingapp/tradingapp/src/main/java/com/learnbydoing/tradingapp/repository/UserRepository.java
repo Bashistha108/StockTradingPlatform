@@ -10,6 +10,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     //this method declared because JpaRepository dont have it by default. JpaRepository will use sql queries for
     //findby... in this case; SELECT * FROM user WHERE email = ...
+    User findByUserId(int userId);
     User findByEmail(String email);
 
 }

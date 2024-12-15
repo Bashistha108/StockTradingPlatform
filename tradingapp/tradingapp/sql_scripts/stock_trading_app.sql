@@ -57,6 +57,7 @@ CREATE TABLE `stock_price_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Create transactions table for recording user transactions
+-- ALTER TABLE `transactions` MODIFY COLUMN `quantity` DOUBLE NOT NULL;
 CREATE TABLE `transactions` (
   `transaction_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
